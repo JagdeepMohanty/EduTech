@@ -1,0 +1,9 @@
+fastapi==0.68.0
+uvicorn
+sqlalchemy
+aiosqlite
+python-multipart
+python-dotenv
+passlib[bcrypt]
+PyJWT
+pydantic==1.6.2
