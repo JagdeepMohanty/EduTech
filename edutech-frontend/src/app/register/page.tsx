@@ -3,6 +3,18 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import {
+  Container,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Alert,
+  CircularProgress,
+  Avatar
+} from '@mui/material';
+import { PersonAdd, Home } from '@mui/icons-material';
 import { useAuth } from '@/context/AuthContext';
 
 export default function RegisterPage() {
@@ -13,6 +25,7 @@ export default function RegisterPage() {
     confirmPassword: '',
     full_name: '',
   });
+  const [passwordError, setPasswordError] = useState('');
   const { register, isLoading, error } = useAuth();
   const router = useRouter();
 
@@ -21,13 +34,16 @@ export default function RegisterPage() {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    if (e.target.name === 'confirmPassword' || e.target.name === 'password') {
+      setPasswordError('');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      setPasswordError('Passwords do not match');
       return;
     }
 
@@ -45,123 +61,122 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="glassmorphism max-w-md w-full p-8 rounded-2xl shadow-2xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Account</h1>
-          <p className="text-gray-600 dark:text-gray-300">Join EduTech and start learning</p>
-        </div>
+    <Container maxWidth="sm" sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', py: 4 }}>
+      <Paper elevation={3} sx={{ width: '100%', borderRadius: 4 }}>
+        <Box sx={{ p: 6 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <Avatar sx={{ bgcolor: 'secondary.main', width: 64, height: 64, mx: 'auto', mb: 2 }}>
+              <PersonAdd sx={{ fontSize: 32 }} />
+            </Avatar>
+            <Typography variant="h4" component="h1" fontWeight="700" mb={1}>
+              Create Account
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Join EduTech and start learning
+            </Typography>
+          </Box>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Email Address
-            </label>
-            <input
+          <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <TextField
+              fullWidth
               type="email"
-              id="email"
+              label="Email Address"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="neumorphism-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               placeholder="Enter your email"
             />
-          </div>
 
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Username
-            </label>
-            <input
+            <TextField
+              fullWidth
               type="text"
-              id="username"
+              label="Username"
               name="username"
               value={formData.username}
               onChange={handleChange}
               required
-              className="neumorphism-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               placeholder="Choose a username"
             />
-          </div>
 
-          <div>
-            <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Full Name (Optional)
-            </label>
-            <input
+            <TextField
+              fullWidth
               type="text"
-              id="full_name"
+              label="Full Name (Optional)"
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
-              className="neumorphism-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               placeholder="Enter your full name"
             />
-          </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Password
-            </label>
-            <input
+            <TextField
+              fullWidth
               type="password"
-              id="password"
+              label="Password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               required
-              className="neumorphism-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               placeholder="Create a password"
             />
-          </div>
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Confirm Password
-            </label>
-            <input
+            <TextField
+              fullWidth
               type="password"
-              id="confirmPassword"
+              label="Confirm Password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className="neumorphism-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               placeholder="Confirm your password"
+              error={!!passwordError}
+              helperText={passwordError}
             />
-          </div>
 
-          {error && (
-            <div className="text-red-500 text-sm text-center bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
-              {error}
-            </div>
-          )}
+            {error && (
+              <Alert severity="error" sx={{ borderRadius: 2 }}>
+                {error}
+              </Alert>
+            )}
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="neumorphism-button w-full py-3 px-4 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? 'Creating Account...' : 'Create Account'}
-          </button>
-        </form>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              size="large"
+              disabled={isLoading}
+              startIcon={isLoading ? <CircularProgress size={20} /> : <PersonAdd />}
+              sx={{
+                py: 1.5,
+                borderRadius: 3,
+                background: 'linear-gradient(45deg, #8b5cf6, #ec4899)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #7c3aed, #db2777)'
+                }
+              }}
+            >
+              {isLoading ? 'Creating Account...' : 'Create Account'}
+            </Button>
+          </Box>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-600 dark:text-gray-300">
-            Already have an account?{' '}
-            <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
-              Sign in here
+          <Box sx={{ mt: 4, textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              Already have an account?{' '}
+              <Link href="/login" style={{ color: '#8b5cf6', textDecoration: 'none', fontWeight: 600 }}>
+                Sign in here
+              </Link>
+            </Typography>
+          </Box>
+
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Link href="/" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>
+              <Button startIcon={<Home />} size="small" color="inherit">
+                Back to Home
+              </Button>
             </Link>
-          </p>
-        </div>
-
-        <div className="mt-4 text-center">
-          <Link href="/" className="text-gray-500 hover:text-gray-400 text-sm">
-            ← Back to Home
-          </Link>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Paper>
+    </Container>
   );
 }

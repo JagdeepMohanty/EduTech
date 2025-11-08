@@ -1,88 +1,191 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+  useTheme,
+  Avatar,
+  Chip
+} from '@mui/material';
+import {
+  Home,
+  Quiz,
+  Dashboard,
+  Feedback,
+  Chat,
+  Summarize,
+  Menu as MenuIcon,
+  Login,
+  PersonAdd,
+  Logout
+} from '@mui/icons-material';
 import { useAuth } from '@/context/AuthContext';
 import Logo from './Logo';
 
 const Navbar: React.FC = () => {
   const { user, token, logout } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null);
 
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/quizzes', label: 'Quizzes' },
-    { href: '/dashboard', label: 'Dashboard' },
-    { href: '/feedback', label: 'Feedback' },
-    { href: '/chatbot', label: 'Chatbot' },
-    { href: '/summarize', label: 'Summarizer' },
+    { href: '/', label: 'Home', icon: <Home /> },
+    { href: '/quizzes', label: 'Quizzes', icon: <Quiz /> },
+    { href: '/dashboard', label: 'Dashboard', icon: <Dashboard /> },
+    { href: '/feedback', label: 'Feedback', icon: <Feedback /> },
+    { href: '/chatbot', label: 'Chatbot', icon: <Chat /> },
+    { href: '/summarize', label: 'Summarizer', icon: <Summarize /> },
   ];
 
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMobileMenuAnchor(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMenuAnchor(null);
+  };
+
   return (
-    <nav className="glass sticky top-0 z-50 w-full px-4 py-3 shadow-lg">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Left: navigation links (hidden on small screens) */}
-        <div className="hidden md:flex items-center space-x-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="neumorphism-inset rounded-md px-3 py-2 text-gray-700 dark:text-gray-300 hover:neumorphism transition-all duration-150"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Center: Logo + Title */}
-        <div className="flex-1 flex items-center justify-center">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="neumorphism rounded-lg p-2 w-10 h-10 flex items-center justify-center">
-              <Logo size={28} />
-            </div>
-            <span className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+    <AppBar position="sticky" elevation={0}>
+      <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, md: 4 } }}>
+        {/* Logo */}
+        <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Avatar sx={{ bgcolor: 'primary.main', width: 40, height: 40 }}>
+              <Logo size={24} />
+            </Avatar>
+            <Typography variant="h6" component="div" sx={{ 
+              fontWeight: 700,
+              background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>
               EduTech
-            </span>
-          </Link>
-        </div>
+            </Typography>
+          </Box>
+        </Link>
 
-        {/* Right: auth buttons */}
-        <div className="flex items-center gap-3">
+        {/* Desktop Navigation */}
+        {!isMobile && (
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {navLinks.map((link) => (
+              <Link key={link.href} href={link.href} style={{ textDecoration: 'none' }}>
+                <Button
+                  startIcon={link.icon}
+                  sx={{
+                    color: 'text.primary',
+                    borderRadius: 3,
+                    px: 2,
+                    py: 1,
+                    '&:hover': {
+                      bgcolor: 'rgba(59, 130, 246, 0.1)',
+                      transform: 'translateY(-2px)'
+                    },
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  {link.label}
+                </Button>
+              </Link>
+            ))}
+          </Box>
+        )}
+
+        {/* Auth Section */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {token ? (
             <>
-              <span className="hidden sm:inline text-sm text-gray-700 dark:text-gray-300">Welcome, {user?.username || 'User'}</span>
-              <button
+              {!isMobile && (
+                <Chip
+                  avatar={<Avatar sx={{ bgcolor: 'secondary.main' }}>{user?.username?.[0]?.toUpperCase()}</Avatar>}
+                  label={`Welcome, ${user?.username || 'User'}`}
+                  variant="outlined"
+                  sx={{ borderRadius: 3 }}
+                />
+              )}
+              <Button
                 onClick={logout}
-                className="neumorphism rounded-md px-4 py-2 text-red-600 hover:neumorphism-pressed transition-all duration-150"
+                startIcon={<Logout />}
+                variant="outlined"
+                color="error"
+                sx={{ borderRadius: 3 }}
               >
                 Logout
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <Link href="/login">
-                <button className="neumorphism rounded-md px-4 py-2 text-blue-600 hover:neumorphism-pressed transition-all duration-150">
+              <Link href="/login" style={{ textDecoration: 'none' }}>
+                <Button
+                  startIcon={<Login />}
+                  variant="outlined"
+                  sx={{ borderRadius: 3, mr: 1 }}
+                >
                   Login
-                </button>
+                </Button>
               </Link>
-              <Link href="/register">
-                <button className="neumorphism rounded-md px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-150">
+              <Link href="/register" style={{ textDecoration: 'none' }}>
+                <Button
+                  startIcon={<PersonAdd />}
+                  variant="contained"
+                  sx={{
+                    borderRadius: 3,
+                    background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)',
+                    '&:hover': {
+                      background: 'linear-gradient(45deg, #1d4ed8, #7c3aed)'
+                    }
+                  }}
+                >
                   Sign Up
-                </button>
+                </Button>
               </Link>
             </>
           )}
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button className="neumorphism rounded-md p-2">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
+          {/* Mobile Menu */}
+          {isMobile && (
+            <>
+              <IconButton
+                onClick={handleMobileMenuOpen}
+                sx={{ color: 'text.primary' }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                anchorEl={mobileMenuAnchor}
+                open={Boolean(mobileMenuAnchor)}
+                onClose={handleMobileMenuClose}
+                PaperProps={{
+                  sx: {
+                    mt: 1,
+                    borderRadius: 3,
+                    minWidth: 200
+                  }
+                }}
+              >
+                {navLinks.map((link) => (
+                  <Link key={link.href} href={link.href} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <MenuItem onClick={handleMobileMenuClose} sx={{ gap: 2, py: 1.5 }}>
+                      {link.icon}
+                      {link.label}
+                    </MenuItem>
+                  </Link>
+                ))}
+              </Menu>
+            </>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };
 

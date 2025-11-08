@@ -3,6 +3,18 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import {
+  Container,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Alert,
+  CircularProgress,
+  Avatar
+} from '@mui/material';
+import { Login as LoginIcon, Home } from '@mui/icons-material';
 import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
@@ -22,74 +34,86 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="glassmorphism max-w-md w-full mx-4 p-8 rounded-2xl shadow-2xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h1>
-          <p className="text-gray-600 dark:text-gray-300">Sign in to your EduTech account</p>
-        </div>
+    <Container maxWidth="sm" sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', py: 4 }}>
+      <Paper elevation={3} sx={{ width: '100%', borderRadius: 4 }}>
+        <Box sx={{ p: 6 }}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <Avatar sx={{ bgcolor: 'primary.main', width: 64, height: 64, mx: 'auto', mb: 2 }}>
+              <LoginIcon sx={{ fontSize: 32 }} />
+            </Avatar>
+            <Typography variant="h4" component="h1" fontWeight="700" mb={1}>
+              Welcome Back
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Sign in to your EduTech account
+            </Typography>
+          </Box>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Email Address
-            </label>
-            <input
+          <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <TextField
+              fullWidth
               type="email"
-              id="email"
+              label="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="neumorphism-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               placeholder="Enter your email"
             />
-          </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Password
-            </label>
-            <input
+            <TextField
+              fullWidth
               type="password"
-              id="password"
+              label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="neumorphism-input w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               placeholder="Enter your password"
             />
-          </div>
 
-          {error && (
-            <div className="text-red-500 text-sm text-center bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
-              {error}
-            </div>
-          )}
+            {error && (
+              <Alert severity="error" sx={{ borderRadius: 2 }}>
+                {error}
+              </Alert>
+            )}
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="neumorphism-button w-full py-3 px-4 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? 'Signing In...' : 'Sign In'}
-          </button>
-        </form>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              size="large"
+              disabled={isLoading}
+              startIcon={isLoading ? <CircularProgress size={20} /> : <LoginIcon />}
+              sx={{
+                py: 1.5,
+                borderRadius: 3,
+                background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #1d4ed8, #7c3aed)'
+                }
+              }}
+            >
+              {isLoading ? 'Signing In...' : 'Sign In'}
+            </Button>
+          </Box>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-600 dark:text-gray-300">
-            Don't have an account?{' '}
-            <Link href="/register" className="text-blue-600 hover:text-blue-500 font-medium">
-              Sign up here
+          <Box sx={{ mt: 4, textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              Don't have an account?{' '}
+              <Link href="/register" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 600 }}>
+                Sign up here
+              </Link>
+            </Typography>
+          </Box>
+
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Link href="/" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>
+              <Button startIcon={<Home />} size="small" color="inherit">
+                Back to Home
+              </Button>
             </Link>
-          </p>
-        </div>
-
-        <div className="mt-4 text-center">
-          <Link href="/" className="text-gray-500 hover:text-gray-400 text-sm">
-            ← Back to Home
-          </Link>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Paper>
+    </Container>
   );
 }

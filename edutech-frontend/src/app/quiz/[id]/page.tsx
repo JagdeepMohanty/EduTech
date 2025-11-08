@@ -1,11 +1,11 @@
+'use client';
+
+import { useParams } from 'next/navigation';
 import QuizComponent from '@/components/QuizComponent';
 
-interface QuizPageProps {
-  params: {
-    id: string;
-  };
-}
+export default function QuizPage() {
+  const params = useParams();
+  const quizId = params.id as string;
 
-export default function QuizPage({ params }: QuizPageProps) {
-  return <QuizComponent quizId={params.id} />;
+  return <QuizComponent quizId={quizId} />;
 }

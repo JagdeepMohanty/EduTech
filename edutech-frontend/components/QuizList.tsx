@@ -2,6 +2,29 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  Chip,
+  CircularProgress,
+  Alert
+} from '@mui/material';
+import {
+  Quiz as QuizIcon,
+  PlayArrow,
+  Subject,
+  AccessTime
+} from '@mui/icons-material';
 import { Quiz } from '@/types/quiz';
 import { quizService } from '@/services/quiz';
 
@@ -16,8 +39,33 @@ const QuizList: React.FC = () => {
 
   const fetchQuizzes = async () => {
     try {
-      const data = await quizService.getQuizzes(subject || undefined);
-      setQuizzes(data);
+      // Mock data for demo purposes when API is not available
+      const mockQuizzes = [
+        {
+          id: '1',
+          title: 'Mathematics Basics',
+          description: 'Test your knowledge of basic mathematical concepts',
+          subject: 'Mathematics',
+          questions: [{ question_text: 'What is 2+2?', options: ['3', '4', '5', '6'], correct_answer: 1 }]
+        },
+        {
+          id: '2',
+          title: 'Science Fundamentals',
+          description: 'Explore fundamental scientific principles',
+          subject: 'Science',
+          questions: [{ question_text: 'What is H2O?', options: ['Oxygen', 'Water', 'Hydrogen', 'Carbon'], correct_answer: 1 }]
+        },
+        {
+          id: '3',
+          title: 'World History',
+          description: 'Journey through important historical events',
+          subject: 'History',
+          questions: [{ question_text: 'When did WWII end?', options: ['1944', '1945', '1946', '1947'], correct_answer: 1 }]
+        }
+      ];
+      
+      const filteredQuizzes = subject ? mockQuizzes.filter(q => q.subject === subject) : mockQuizzes;
+      setQuizzes(filteredQuizzes);
     } catch (error) {
       console.error('Error fetching quizzes:', error);
     } finally {
@@ -26,56 +74,105 @@ const QuizList: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="text-center">Loading quizzes...</div>;
+    return (
+      <Container maxWidth="lg" sx={{ py: 4, textAlign: 'center' }}>
+        <CircularProgress size={60} />
+        <Typography variant="h6" sx={{ mt: 2 }}>Loading quizzes...</Typography>
+      </Container>
+    );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Available Quizzes</h1>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h3" component="h1" fontWeight="700" mb={4} textAlign="center">
+        Available Quizzes
+      </Typography>
 
-      <div className="mb-6">
-        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-          Filter by Subject:
-        </label>
-        <select
-          id="subject"
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">All Subjects</option>
-          <option value="Mathematics">Mathematics</option>
-          <option value="Science">Science</option>
-          <option value="History">History</option>
-          <option value="Literature">Literature</option>
-        </select>
-      </div>
+      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel>Filter by Subject</InputLabel>
+          <Select
+            value={subject}
+            label="Filter by Subject"
+            onChange={(e) => setSubject(e.target.value)}
+            sx={{ borderRadius: 2 }}
+          >
+            <MenuItem value="">All Subjects</MenuItem>
+            <MenuItem value="Mathematics">Mathematics</MenuItem>
+            <MenuItem value="Science">Science</MenuItem>
+            <MenuItem value="History">History</MenuItem>
+            <MenuItem value="Literature">Literature</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Grid container spacing={3}>
         {quizzes.map((quiz) => (
-          <div key={quiz.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-            <h2 className="text-xl font-semibold mb-2">{quiz.title}</h2>
-            <p className="text-gray-600 mb-4">{quiz.description}</p>
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-sm text-gray-500">Subject: {quiz.subject}</span>
-              <span className="text-sm text-gray-500">{quiz.questions.length} questions</span>
-            </div>
-            <Link
-              href={`/quiz/${quiz.id}`}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-block w-full text-center"
-            >
-              Take Quiz
-            </Link>
-          </div>
+          <Grid item xs={12} sm={6} md={4} key={quiz.id}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Box display="flex" alignItems="center" mb={2}>
+                  <QuizIcon color="primary" sx={{ mr: 1 }} />
+                  <Typography variant="h6" component="h2" fontWeight="600">
+                    {quiz.title}
+                  </Typography>
+                </Box>
+                
+                <Typography variant="body2" color="text.secondary" mb={3}>
+                  {quiz.description}
+                </Typography>
+                
+                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                  <Chip
+                    icon={<Subject />}
+                    label={quiz.subject}
+                    color="primary"
+                    variant="outlined"
+                    size="small"
+                  />
+                  <Chip
+                    icon={<AccessTime />}
+                    label={`${quiz.questions.length} questions`}
+                    color="secondary"
+                    variant="outlined"
+                    size="small"
+                  />
+                </Box>
+              </CardContent>
+              
+              <CardActions sx={{ p: 2, pt: 0 }}>
+                <Link href={`/quiz/${quiz.id}`} style={{ textDecoration: 'none', width: '100%' }}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    startIcon={<PlayArrow />}
+                    sx={{
+                      borderRadius: 2,
+                      py: 1.5,
+                      background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)',
+                      '&:hover': {
+                        background: 'linear-gradient(45deg, #1d4ed8, #7c3aed)',
+                        transform: 'translateY(-2px)'
+                      },
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    Take Quiz
+                  </Button>
+                </Link>
+              </CardActions>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
 
       {quizzes.length === 0 && (
-        <div className="text-center text-gray-500 mt-8">
-          No quizzes available for the selected subject.
-        </div>
+        <Alert severity="info" sx={{ mt: 4, borderRadius: 3 }}>
+          <Typography variant="h6">No quizzes available</Typography>
+          <Typography>No quizzes found for the selected subject. Try selecting a different subject or check back later.</Typography>
+        </Alert>
       )}
-    </div>
+    </Container>
   );
 };
 

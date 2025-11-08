@@ -1,12 +1,10 @@
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { AuthProvider } from '@/context/AuthContext'
-import Navbar from '@/components/Navbar'
+import { Providers } from './providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'EduTech Platform',
   description: 'An adaptive learning platform with AI features',
 }
@@ -17,12 +15,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" data-theme="light">
-      <body className={`${inter.className} min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800`}>
-        <AuthProvider>
-          <Navbar />
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers>
           {children}
-        </AuthProvider>
+        </Providers>
       </body>
     </html>
   )

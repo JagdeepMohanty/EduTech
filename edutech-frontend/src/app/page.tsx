@@ -1,102 +1,276 @@
 import Link from 'next/link'
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  Avatar,
+  Paper,
+  Chip
+} from '@mui/material'
+import {
+  Chat,
+  Summarize,
+  TrendingUp,
+  PlayArrow,
+  Quiz,
+  PersonAdd
+} from '@mui/icons-material'
 import Logo from '@/components/Logo'
-import './globals.css'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-8 pb-20">
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Hero Section */}
-      <section className="w-full max-w-5xl mt-6">
-        <div className="glass rounded-3xl p-8 shadow-xl flex flex-col md:flex-row items-center gap-6">
-          {/* Left: text */}
-          <div className="flex-1 text-center md:text-left">
-            <div className="flex items-center gap-3 justify-center md:justify-start mb-4">
-              <div className="neumorphism rounded-lg p-2 w-12 h-12 flex items-center justify-center">
-                <Logo size={36} />
-              </div>
-              <div>
-                <h1 className="text-3xl md:text-4xl font-extrabold leading-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  EduTech — Learn Smarter
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Adaptive lessons • AI summarizer • Quizzes • Progress tracking</p>
-              </div>
-            </div>
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 4, md: 6 },
+          mb: 6,
+          borderRadius: 4,
+          background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1))',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
+        <Grid container spacing={4} alignItems="center">
+          <Grid item xs={12} md={8}>
+            <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+              <Box display="flex" alignItems="center" justifyContent={{ xs: 'center', md: 'flex-start' }} mb={3}>
+                <Avatar
+                  sx={{
+                    bgcolor: 'primary.main',
+                    width: 60,
+                    height: 60,
+                    mr: 2,
+                    boxShadow: '0 4px 20px rgba(59, 130, 246, 0.3)'
+                  }}
+                >
+                  <Logo size={32} />
+                </Avatar>
+                <Box>
+                  <Typography
+                    variant="h2"
+                    component="h1"
+                    sx={{
+                      fontWeight: 800,
+                      color: '#1e293b',
+                      textShadow: '0 2px 4px rgba(255,255,255,0.8)',
+                      mb: 1
+                    }}
+                  >
+                    EduTech — Learn Smarter
+                  </Typography>
+                  <Box display="flex" gap={1} flexWrap="wrap" justifyContent={{ xs: 'center', md: 'flex-start' }}>
+                    <Chip label="Adaptive lessons" size="small" sx={{ bgcolor: 'rgba(59,130,246,0.9)', color: 'white', fontWeight: 600 }} />
+                    <Chip label="AI summarizer" size="small" sx={{ bgcolor: 'rgba(139,92,246,0.9)', color: 'white', fontWeight: 600 }} />
+                    <Chip label="Progress tracking" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.9)', color: 'white', fontWeight: 600 }} />
+                  </Box>
+                </Box>
+              </Box>
 
-            <p className="mt-4 text-gray-700 dark:text-gray-300 max-w-xl">
-              Build your skills with bite-sized lessons, instant summarization, and adaptive quizzes. Track progress and get help from an AI tutor whenever you need it.
-            </p>
+              <Typography variant="h6" color="text.secondary" sx={{ mb: 4, maxWidth: 600 }}>
+                Build your skills with bite-sized lessons, instant summarization, and adaptive quizzes. 
+                Track progress and get help from an AI tutor whenever you need it.
+              </Typography>
 
-            <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-3 justify-center md:justify-start">
-              <Link href="/register" className="inline-block">
-                <span className="inline-flex items-center justify-center rounded-lg px-5 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium shadow-md hover:opacity-95 transition">
-                  Get Started
-                </span>
-              </Link>
+              <Box
+                display="flex"
+                gap={2}
+                flexDirection={{ xs: 'column', sm: 'row' }}
+                justifyContent={{ xs: 'center', md: 'flex-start' }}
+              >
+                <Link href="/register" style={{ textDecoration: 'none' }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    startIcon={<PersonAdd />}
+                    sx={{
+                      borderRadius: 3,
+                      px: 4,
+                      py: 1.5,
+                      background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)',
+                      '&:hover': {
+                        background: 'linear-gradient(45deg, #1d4ed8, #7c3aed)',
+                        transform: 'translateY(-2px)'
+                      },
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    Get Started
+                  </Button>
+                </Link>
 
-              <Link href="/quizzes" className="inline-block">
-                <span className="inline-flex items-center justify-center rounded-lg px-4 py-3 border border-transparent neumorphism text-gray-800 dark:text-gray-200 hover:neumorphism-pressed transition">
-                  Explore Quizzes
-                </span>
-              </Link>
+                <Link href="/quizzes" style={{ textDecoration: 'none' }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    startIcon={<Quiz />}
+                    sx={{
+                      borderRadius: 3,
+                      px: 4,
+                      py: 1.5,
+                      bgcolor: 'rgba(255,255,255,0.9)',
+                      color: '#1e293b',
+                      fontWeight: 600,
+                      '&:hover': {
+                        bgcolor: 'rgba(255,255,255,1)',
+                        transform: 'translateY(-2px)'
+                      },
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    Explore Quizzes
+                  </Button>
+                </Link>
 
-              <Link href="/summarize" className="inline-block">
-                <span className="inline-flex items-center justify-center rounded-lg px-4 py-3 text-sm text-blue-600 hover:underline">
-                  Try Summarizer →
-                </span>
-              </Link>
-            </div>
-          </div>
+                <Link href="/summarize" style={{ textDecoration: 'none' }}>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    endIcon={<PlayArrow />}
+                    sx={{ 
+                      borderRadius: 3, 
+                      px: 3,
+                      borderColor: 'rgba(30,41,59,0.8)',
+                      color: '#1e293b',
+                      fontWeight: 600,
+                      bgcolor: 'rgba(255,255,255,0.7)',
+                      '&:hover': {
+                        bgcolor: 'rgba(255,255,255,0.9)',
+                        borderColor: '#1e293b'
+                      }
+                    }}
+                  >
+                    Try Summarizer
+                  </Button>
+                </Link>
+              </Box>
+            </Box>
+          </Grid>
 
-          {/* Right: highlight card */}
-          <div className="w-full md:w-80">
-            <div className="glass-strong rounded-2xl p-6 text-center">
-              <h3 className="font-semibold text-lg mb-2">Today’s Focus</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Complete a 10-min quiz to keep your streak going.</p>
-              <Link href="/quizzes">
-                <button className="w-full rounded-md px-4 py-2 bg-gradient-to-r from-indigo-600 to-emerald-500 text-white font-semibold hover:from-indigo-700 hover:to-emerald-600 transition">
-                  Start Quiz
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+          <Grid item xs={12} md={4}>
+            <Card
+              sx={{
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1))',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)'
+              }}
+            >
+              <CardContent sx={{ textAlign: 'center', p: 4 }}>
+                <Typography variant="h5" fontWeight="600" mb={2}>
+                  Today's Focus
+                </Typography>
+                <Typography variant="body2" color="text.secondary" mb={3}>
+                  Complete a 10-min quiz to keep your streak going.
+                </Typography>
+                <Link href="/quizzes" style={{ textDecoration: 'none' }}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    startIcon={<Quiz />}
+                    sx={{
+                      borderRadius: 3,
+                      py: 1.5,
+                      background: 'linear-gradient(45deg, #10b981, #3b82f6)',
+                      '&:hover': {
+                        background: 'linear-gradient(45deg, #059669, #1d4ed8)'
+                      }
+                    }}
+                  >
+                    Start Quiz
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Paper>
 
-      {/* Features grid (kept concise) */}
-      <section className="w-full max-w-6xl mt-10">
-        <h2 className="text-xl font-bold mb-4 text-center">Core Features</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div className="glass rounded-xl p-5 text-center">
-            <div className="neumorphism rounded-full w-12 h-12 mx-auto flex items-center justify-center mb-3">
-              <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18" />
-              </svg>
-            </div>
-            <h4 className="font-semibold">AI Chatbot</h4>
-            <p className="text-sm text-gray-600">Get instant answers and learning guidance.</p>
-          </div>
+      {/* Features Section */}
+      <Box sx={{ textAlign: 'center', mb: 4 }}>
+        <Typography variant="h4" component="h2" fontWeight="700" mb={6}>
+          Core Features
+        </Typography>
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={6} md={4}>
+            <Card sx={{ height: '100%', textAlign: 'center' }}>
+              <CardContent sx={{ p: 4 }}>
+                <Avatar
+                  sx={{
+                    bgcolor: 'primary.main',
+                    width: 64,
+                    height: 64,
+                    mx: 'auto',
+                    mb: 3,
+                    boxShadow: '0 4px 20px rgba(59, 130, 246, 0.3)'
+                  }}
+                >
+                  <Chat sx={{ fontSize: 32 }} />
+                </Avatar>
+                <Typography variant="h6" component="h4" fontWeight="600" mb={2}>
+                  AI Chatbot
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Get instant answers and learning guidance from our intelligent AI assistant.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
 
-          <div className="glass rounded-xl p-5 text-center">
-            <div className="neumorphism rounded-full w-12 h-12 mx-auto flex items-center justify-center mb-3">
-              <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6" />
-              </svg>
-            </div>
-            <h4 className="font-semibold">Smart Summarizer</h4>
-            <p className="text-sm text-gray-600">Quickly digest long articles and notes.</p>
-          </div>
+          <Grid item xs={12} sm={6} md={4}>
+            <Card sx={{ height: '100%', textAlign: 'center' }}>
+              <CardContent sx={{ p: 4 }}>
+                <Avatar
+                  sx={{
+                    bgcolor: 'secondary.main',
+                    width: 64,
+                    height: 64,
+                    mx: 'auto',
+                    mb: 3,
+                    boxShadow: '0 4px 20px rgba(139, 92, 246, 0.3)'
+                  }}
+                >
+                  <Summarize sx={{ fontSize: 32 }} />
+                </Avatar>
+                <Typography variant="h6" component="h4" fontWeight="600" mb={2}>
+                  Smart Summarizer
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Quickly digest long articles and notes with AI-powered summarization.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
 
-          <div className="glass rounded-xl p-5 text-center">
-            <div className="neumorphism rounded-full w-12 h-12 mx-auto flex items-center justify-center mb-3">
-              <svg className="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5" />
-              </svg>
-            </div>
-            <h4 className="font-semibold">Progress Tracking</h4>
-            <p className="text-sm text-gray-600">See your growth with easy-to-read metrics.</p>
-          </div>
-        </div>
-      </section>
-    </main>
+          <Grid item xs={12} sm={6} md={4}>
+            <Card sx={{ height: '100%', textAlign: 'center' }}>
+              <CardContent sx={{ p: 4 }}>
+                <Avatar
+                  sx={{
+                    bgcolor: 'success.main',
+                    width: 64,
+                    height: 64,
+                    mx: 'auto',
+                    mb: 3,
+                    boxShadow: '0 4px 20px rgba(16, 185, 129, 0.3)'
+                  }}
+                >
+                  <TrendingUp sx={{ fontSize: 32 }} />
+                </Avatar>
+                <Typography variant="h6" component="h4" fontWeight="600" mb={2}>
+                  Progress Tracking
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  See your growth with comprehensive analytics and easy-to-read metrics.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   )
 }

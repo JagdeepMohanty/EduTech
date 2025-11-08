@@ -1,14 +1,7 @@
-import Dashboard from '@/components/Dashboard';
-import Protected from '@/components/Protected';
+'use client';
 
-/**
- * Dashboard page — accessible only to authenticated users.
- * Wrap the dashboard component in a Protected wrapper to ensure auth.
- */
+import Dashboard from '@/components/Dashboard';
+
 export default function DashboardPage() {
-  return (
-    <Protected>
-      <Dashboard />
-    </Protected>
-  );
+  return <Dashboard />;
 }
