@@ -12,8 +12,5 @@ export const feedbackService = {
     return response.data;
   },
 
-  async getFeedbackStats(): Promise<FeedbackStats> {
-    const response = await api.get('/feedback/stats');
-    return response.data;
-  },
+
 };

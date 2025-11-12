@@ -174,8 +174,8 @@ const Dashboard: React.FC = () => {
           <Card sx={{ height: '100%' }}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
-                <Avatar sx={{ bgcolor: getTrendColor(userProgress.improvement_trend), mr: 2 }}>
-                  {getTrendIcon(userProgress.improvement_trend)}
+                <Avatar sx={{ bgcolor: getTrendColor(dashboardData.performance_trend || 'stable'), mr: 2 }}>
+                  {getTrendIcon(dashboardData.performance_trend || 'stable')}
                 </Avatar>
                 <Typography variant="h6" component="div">
                   Trend
@@ -186,7 +186,7 @@ const Dashboard: React.FC = () => {
                 sx={{ color: getTrendColor(dashboardData.performance_trend || 'stable'), textTransform: 'capitalize' }}
                 fontWeight="bold"
               >
-                {dashboardData.performance_trend || 'Stable'}
+                {dashboardData.performance_trend === 'improving' ? 'Improving' : dashboardData.performance_trend === 'needs_improvement' ? 'Needs Work' : 'Stable'}
               </Typography>
             </CardContent>
           </Card>

@@ -42,26 +42,8 @@ const Summarizer: React.FC = () => {
 
   const loadHistory = async () => {
     try {
-      // Mock summary history for demo
-      const mockHistory = [
-        {
-          id: '1',
-          original_text: 'This is a long article about artificial intelligence and machine learning technologies that are transforming the world.',
-          summary: 'AI and ML technologies are transforming the world.',
-          original_length: 20,
-          summary_length: 8,
-          timestamp: new Date().toISOString()
-        },
-        {
-          id: '2',
-          original_text: 'Education technology has evolved significantly over the past decade with the introduction of online learning platforms.',
-          summary: 'EdTech has evolved with online learning platforms.',
-          original_length: 18,
-          summary_length: 7,
-          timestamp: new Date(Date.now() - 86400000).toISOString()
-        }
-      ];
-      setHistory(mockHistory);
+      const summaryHistory = await summarizationService.getSummaryHistory();
+      setHistory(summaryHistory);
     } catch (error) {
       console.error('Error loading history:', error);
     }
@@ -72,15 +54,12 @@ const Summarizer: React.FC = () => {
 
     setIsLoading(true);
     try {
-      // Mock summarization for demo
-      const words = inputText.trim().split(/\s+/);
-      const summaryWords = words.slice(0, Math.min(maxLength, Math.max(minLength, Math.floor(words.length * 0.3))));
-      const mockResult = {
-        summary: summaryWords.join(' ') + '...',
-        original_length: words.length,
-        summary_length: summaryWords.length
+      const request: SummarizeRequest = {
+        text: inputText,
+        max_length: maxLength
       };
-      setSummary(mockResult);
+      const result = await summarizationService.summarizeText(request);
+      setSummary(result);
       loadHistory();
     } catch (error) {
       console.error('Error summarizing text:', error);

@@ -31,12 +31,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoading: true,
     error: null,
   });
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const token = localStorage.getItem('token');
     if (token) {
       setAuthState(prev => ({ ...prev, token, isLoading: true }));
-      // Verify token and get user data
       authService.getCurrentUser()
         .then(user => {
           setAuthState(prev => ({ ...prev, user, isLoading: false }));
@@ -50,11 +51,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
+  if (!mounted) {
+    return null;
+  }
+
   const login = async (email: string, password: string) => {
     try {
       setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
       const tokenData = await authService.login({ email, password });
-      localStorage.setItem('token', tokenData.access_token);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', tokenData.access_token);
+      }
       setAuthState({
         user: tokenData.user,
         token: tokenData.access_token,
@@ -88,7 +95,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    authService.logout();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
     setAuthState({
       user: null,
       token: null,

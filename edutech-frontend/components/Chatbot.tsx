@@ -12,7 +12,14 @@ import {
   CircularProgress
 } from '@mui/material';
 import { Send, SmartToy, Person } from '@mui/icons-material';
-import { ChatMessage, Conversation } from '@/types/chatbot';
+import { ChatResponse, Conversation } from '@/types/chatbot';
+
+interface ChatMessage {
+  id?: string;
+  user_message: string;
+  bot_response: string;
+  timestamp: string;
+}
 import { chatbotService } from '@/services/chatbot';
 
 const Chatbot: React.FC = () => {
@@ -31,18 +38,9 @@ const Chatbot: React.FC = () => {
 
   const loadConversations = async () => {
     try {
-      // Mock conversations for demo
-      const mockConversations = [
-        {
-          id: '1',
-          user_message: 'Hello, can you help me with math?',
-          bot_response: 'Of course! I\'d be happy to help you with mathematics. What specific topic would you like to work on?',
-          timestamp: new Date().toISOString()
-        }
-      ];
-      
+      const conversations = await chatbotService.getConversations();
       const chatMessages: ChatMessage[] = [];
-      mockConversations.forEach((conv) => {
+      conversations.forEach((conv) => {
         chatMessages.push({
           id: conv.id + '_user',
           user_message: conv.user_message,
@@ -81,26 +79,15 @@ const Chatbot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Mock bot responses for demo
-      const mockResponses = [
-        'That\'s a great question! Let me help you with that.',
-        'I understand what you\'re asking. Here\'s what I think...',
-        'Based on your question, I\'d suggest looking into this topic further.',
-        'That\'s an interesting point. Have you considered this approach?',
-        'I\'m here to help! Let me provide some guidance on that.'
-      ];
+      const response = await chatbotService.sendMessage(currentMessage);
       
-      const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
-      
-      setTimeout(() => {
-        const botMessage: ChatMessage = {
-          user_message: '',
-          bot_response: randomResponse,
-          timestamp: new Date().toISOString(),
-        };
-        setMessages(prev => [...prev, botMessage]);
-        setIsLoading(false);
-      }, 1000);
+      const botMessage: ChatMessage = {
+        user_message: '',
+        bot_response: response.response,
+        timestamp: response.timestamp,
+      };
+      setMessages(prev => [...prev, botMessage]);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage: ChatMessage = {

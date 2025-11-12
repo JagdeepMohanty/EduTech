@@ -47,32 +47,9 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ quizId }) => {
 
   const fetchQuiz = async () => {
     try {
-      // Mock quiz data for demo
-      const mockQuiz = {
-        id: quizId,
-        title: `Sample Quiz ${quizId}`,
-        description: 'A sample quiz for demonstration',
-        subject: 'General',
-        questions: [
-          {
-            question_text: 'What is the capital of France?',
-            options: ['London', 'Paris', 'Berlin', 'Madrid'],
-            correct_answer: 1
-          },
-          {
-            question_text: 'Which planet is closest to the Sun?',
-            options: ['Venus', 'Mercury', 'Earth', 'Mars'],
-            correct_answer: 1
-          },
-          {
-            question_text: 'What is 2 + 2?',
-            options: ['3', '4', '5', '6'],
-            correct_answer: 1
-          }
-        ]
-      };
-      setQuiz(mockQuiz);
-      setAnswers(new Array(mockQuiz.questions.length).fill(-1));
+      const quizData = await quizService.getQuiz(quizId);
+      setQuiz(quizData);
+      setAnswers(new Array(quizData.questions.length).fill(-1));
     } catch (error) {
       console.error('Error fetching quiz:', error);
     } finally {
@@ -102,20 +79,8 @@ const QuizComponent: React.FC<QuizComponentProps> = ({ quizId }) => {
     if (!quiz) return;
 
     try {
-      // Mock quiz result calculation
-      const correctAnswers = quiz.questions.reduce((count, question, index) => {
-        return count + (answers[index] === question.correct_answer ? 1 : 0);
-      }, 0);
-      
-      const percentage = (correctAnswers / quiz.questions.length) * 100;
-      const mockResult = {
-        score: correctAnswers,
-        total_questions: quiz.questions.length,
-        percentage: percentage,
-        feedback: percentage >= 80 ? 'Excellent work!' : percentage >= 60 ? 'Good job!' : 'Keep practicing!'
-      };
-      
-      setResult(mockResult);
+      const result = await quizService.submitQuizAttempt(quizId, answers);
+      setResult(result);
       setShowResult(true);
     } catch (error) {
       console.error('Error submitting quiz:', error);

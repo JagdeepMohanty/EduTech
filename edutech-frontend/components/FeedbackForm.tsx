@@ -46,19 +46,25 @@ const FeedbackForm: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      // Mock feedback submission for demo
-      setTimeout(() => {
-        setIsSubmitted(true);
-        setRating(5);
-        setCategory('general');
-        setSubject('');
-        setMessage('');
-        setIsSubmitting(false);
-        
-        setTimeout(() => setIsSubmitted(false), 3000);
-      }, 1000);
+      const feedbackData: FeedbackSubmission = {
+        rating,
+        category,
+        message: message.trim(),
+        subject: subject.trim() || undefined
+      };
+      
+      await feedbackService.submitFeedback(feedbackData);
+      
+      setIsSubmitted(true);
+      setRating(5);
+      setCategory('general');
+      setSubject('');
+      setMessage('');
+      
+      setTimeout(() => setIsSubmitted(false), 3000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
+    } finally {
       setIsSubmitting(false);
     }
   };

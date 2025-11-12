@@ -18,7 +18,9 @@ export const authService = {
   },
 
   logout(): void {
-    localStorage.removeItem('token');
-    window.location.href = '/';
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    }
   },
 };
