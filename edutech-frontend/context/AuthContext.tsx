@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const tokenData = await authService.login({ email, password });
       localStorage.setItem('token', tokenData.access_token);
       setAuthState({
-        user: null, // User data will be fetched separately if needed
+        user: tokenData.user,
         token: tokenData.access_token,
         isLoading: false,
         error: null,

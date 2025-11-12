@@ -38,34 +38,10 @@ const QuizList: React.FC = () => {
   }, [subject]);
 
   const fetchQuizzes = async () => {
+    setLoading(true);
     try {
-      // Mock data for demo purposes when API is not available
-      const mockQuizzes = [
-        {
-          id: '1',
-          title: 'Mathematics Basics',
-          description: 'Test your knowledge of basic mathematical concepts',
-          subject: 'Mathematics',
-          questions: [{ question_text: 'What is 2+2?', options: ['3', '4', '5', '6'], correct_answer: 1 }]
-        },
-        {
-          id: '2',
-          title: 'Science Fundamentals',
-          description: 'Explore fundamental scientific principles',
-          subject: 'Science',
-          questions: [{ question_text: 'What is H2O?', options: ['Oxygen', 'Water', 'Hydrogen', 'Carbon'], correct_answer: 1 }]
-        },
-        {
-          id: '3',
-          title: 'World History',
-          description: 'Journey through important historical events',
-          subject: 'History',
-          questions: [{ question_text: 'When did WWII end?', options: ['1944', '1945', '1946', '1947'], correct_answer: 1 }]
-        }
-      ];
-      
-      const filteredQuizzes = subject ? mockQuizzes.filter(q => q.subject === subject) : mockQuizzes;
-      setQuizzes(filteredQuizzes);
+      const data = await quizService.getQuizzes(subject || undefined);
+      setQuizzes(data);
     } catch (error) {
       console.error('Error fetching quizzes:', error);
     } finally {
@@ -100,8 +76,9 @@ const QuizList: React.FC = () => {
             <MenuItem value="">All Subjects</MenuItem>
             <MenuItem value="Mathematics">Mathematics</MenuItem>
             <MenuItem value="Science">Science</MenuItem>
-            <MenuItem value="History">History</MenuItem>
+            <MenuItem value="Geography">Geography</MenuItem>
             <MenuItem value="Literature">Literature</MenuItem>
+            <MenuItem value="General">General</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -119,7 +96,7 @@ const QuizList: React.FC = () => {
                 </Box>
                 
                 <Typography variant="body2" color="text.secondary" mb={3}>
-                  {quiz.description}
+                  Explore {quiz.subject} with {quiz.questions.length} engaging questions
                 </Typography>
                 
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>

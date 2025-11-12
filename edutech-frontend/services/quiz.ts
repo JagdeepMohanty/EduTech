@@ -18,13 +18,8 @@ export const quizService = {
     return response.data;
   },
 
-  async submitQuizAttempt(quizId: string, attempt: Omit<QuizAttemptCreate, 'quiz_id'>): Promise<QuizResult> {
-    const response = await api.post(`/quizzes/${quizId}/attempt`, { ...attempt, quiz_id: quizId });
-    return response.data;
-  },
-
-  async getQuizAttempts(quizId: string): Promise<any[]> {
-    const response = await api.get(`/quizzes/${quizId}/attempts`);
+  async submitQuizAttempt(quizId: string, answers: number[]): Promise<QuizResult> {
+    const response = await api.post(`/quizzes/${quizId}/attempt`, { answers });
     return response.data;
   },
 };

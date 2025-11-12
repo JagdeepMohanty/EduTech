@@ -1,11 +1,8 @@
 export interface User {
-  id?: string;
+  id: string;
   email: string;
   username: string;
-  full_name?: string;
-  is_active?: boolean;
-  created_at?: string;
-  updated_at?: string;
+  role: string;
 }
 
 export interface UserCreate {
@@ -23,6 +20,7 @@ export interface UserLogin {
 export interface Token {
   access_token: string;
   token_type: string;
+  user: User;
 }
 
 export interface AuthState {

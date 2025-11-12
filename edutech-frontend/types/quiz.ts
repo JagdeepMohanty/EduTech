@@ -7,13 +7,12 @@ export interface Question {
 }
 
 export interface Quiz {
-  id?: string;
+  id: string;
   title: string;
-  description: string;
   subject: string;
   questions: Question[];
-  created_at?: string;
-  updated_at?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface QuizAttempt {
@@ -32,11 +31,11 @@ export interface QuizResult {
   total_questions: number;
   percentage: number;
   feedback: string;
+  attempt_id?: string;
 }
 
 export interface QuizCreate {
   title: string;
-  description: string;
   subject: string;
   questions: Question[];
 }

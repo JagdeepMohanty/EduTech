@@ -1,8 +1,8 @@
 export interface FeedbackSubmission {
   rating: number;
-  category: 'general' | 'quiz' | 'chatbot' | 'summarization' | 'ui';
-  subject?: string;
+  category: string;
   message: string;
+  subject?: string;
 }
 
 export interface FeedbackResponse {
