@@ -4,7 +4,6 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 from bson import ObjectId
-import ssl
 
 load_dotenv()
 
@@ -25,17 +24,8 @@ def init_database():
         return False
     
     try:
-        # Create SSL context that bypasses certificate verification
-        ssl_context = ssl.create_default_context()
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
-        
-        # Create MongoDB client with custom SSL context
-        client = MongoClient(
-            MONGODB_URL,
-            serverSelectionTimeoutMS=10000,
-            ssl_context=ssl_context
-        )
+        # Create MongoDB client with minimal configuration
+        client = MongoClient(MONGODB_URL)
         
         # Test connection
         client.admin.command('ping')
